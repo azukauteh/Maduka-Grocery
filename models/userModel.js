@@ -1,4 +1,4 @@
-mport mongoose from "mongoose";
+import mongoose from "mongoose";
 
 //for create table into db
 const userSchema = new mongoose.Schema({
