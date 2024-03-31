@@ -1,9 +1,11 @@
-![Screenshot](https://imgur.com/a/UIS5O4A)
+
+![Alt text](https://imgur.com/a/UIS5O4A)
 
 
 # Maduka Grocery
 
-Welcome to Maduka Grocery! This project is a contemporary grocery store offering a diverse range of local and international products.
+
+Maduka Grocery is a contemporary grocery store offering a diverse range of local and international products. Our focus is on providing high-quality items and exceptional service to our customers. Whether you're looking for fresh produce, packaged goods, or specialty ingredients from Africa , Maduka Grocery has you covered. Our convenient and inviting environment ensures a pleasant shopping experience, whether you're browsing our aisles or placing an order for specific ingredients. We aim to be your go-to destination for all your grocery needs, bridging continents with our extensive selection and personalized service.
 
 ## Usage Guide
 
