@@ -1,4 +1,5 @@
-![Alt text](https://imgur.com/a/UIS5O4A)
+![Maduka Logo](./images/madukalogo.jpeg)
+
 
 
 # Maduka Grocery
