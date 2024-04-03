@@ -1,4 +1,7 @@
-![Maduka Logo](./images/madukalogo.jpeg)
+<div style="max-width: 100%;">
+  <img src="./images/madukalogo.jpeg" alt="Maduka Logo" style="width: 100%; height: auto;">
+</div>
+
 
 
 
