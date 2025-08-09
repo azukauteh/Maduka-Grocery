@@ -1,52 +1,20 @@
-import Product from "../models/productModel.js";
+// controllers/productController.js
+export const getProducts = async (req, res) => {
+  // Logic to fetch all products
+  res.status(200).json({ message: "Get all products" });
+};
 
-//for add or fetch
-export const getProductController = async (req, res) => {
-    try {
+export const createProduct = async (req, res) => {
+  // Logic to create a new product
+  res.status(201).json({ message: "Product created" });
+};
 
-        const products = await Product.find();
-        res.status(200).send(products);
+export const updateProduct = async (req, res) => {
+  // Logic to update a product by ID
+  res.status(200).json({ message: `Product ${req.params.id} updated` });
+};
 
-    } catch(error) {
-        console.log(error);
-    }
-}
-
-//for add
-export const addProductController = async (req, res) => {
-
-    try {
-
-        const newProducts = new Product(req.body);
-        await newProducts.save();
-        res.status(200).send("Products Created Successfully!");
-
-    } catch(error) {
-        console.log(error);
-    }
-
-}
-
-//for update
-export const updateProductController = async (req, res) => {
-    try {
-
-        await Product.findOneAndUpdate({_id: req.body.productId}, req.body, {new: true})
-        res.status(201).json("Product Updated!");
-    } catch(error) {
-        res.status(400).send(error);
-        console.log(error);
-    }
-}
-
-//for delete
-export const deleteProductController = async (req, res) => {
-    try {
-
-        await Product.findOneAndDelete({_id: req.body.productId})
-        res.status(200).json("Product Deleted!");
-    } catch(error) {
-        res.status(400).send(error);
-        console.log(error);
-    }
-}
+export const deleteProduct = async (req, res) => {
+  // Logic to delete a product by ID
+  res.status(200).json({ message: `Product ${req.params.id} deleted` });
+};
