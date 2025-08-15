@@ -3,8 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI ||' mongodb://atlas-sql-65fac68a2be52242a0a23896-etalj.a.query.mongodb.net/Maduka-Grocery?ssl=true&authSource=admin'
-
+const MONGO_URI = process.env.MONGO_URI;
 const connectDB = async () => {
   try {
     await mongoose.connect(MONGO_URI, {
