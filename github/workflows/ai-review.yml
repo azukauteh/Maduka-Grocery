@@ -1,0 +1,26 @@
+  steps:
+  - name: Checkout repo
+    uses: actions/checkout@v3
+
+  - name: Setup Node.js
+    uses: actions/setup-node@v3
+    with:
+      node-version: '16'
+
+  - name: Run your PR processing script
+    run: |
+      node process-pr.js
+
+  - name: Update PR number
+    run: |
+      node update-pr-number.js
+
+  - name: Commit and push updated .env
+    run: |
+      git config user.name "github-actions[bot]"
+      git config user.email "github-actions[bot]@users.noreply.github.com"
+      git add .env
+      git commit -m "Increment PR_NUMBER"
+      git push
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

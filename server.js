@@ -60,18 +60,27 @@ const seedProducts = [
   { name: 'Millet (1kg)', description: 'Whole millet grains', price: 1.6, category: 'Pantry', image: '', countInStock: 40 },
   { name: 'Corn Flour (1kg)', description: 'Fine corn flour for pap', price: 1.5, category: 'Pantry', image: '', countInStock: 50 }
 ];
-
-// Select a subset of products for the ticker
-const tickerProducts = seedProducts.slice(0, 10).map(p => `${p.name} - $${p.price.toFixed(2)}`);
-
-// Select featured products for display
-const featuredProducts = [
-  seedProducts.find(p => p.name === 'Milk (1L)'),
-  seedProducts.find(p => p.name === 'Chicken (1kg)'),
-  seedProducts.find(p => p.name === 'Yam (1 tuber)'),
-  seedProducts.find(p => p.name === 'Egusi (500g)'),
-  seedProducts.find(p => p.name === 'Palm Oil (1L)')
+const messages = [
+  "🛒 Welcome to Maduka Grocery Store — where freshness never sleeps!",
+  "🥦 Your veggies are waiting… and they miss you.",
+  "🍞 Bread just came out of the oven — hurry!",
+  "🎉 Grocery shopping just got exciting. Let's go!"
 ];
+
+// Featured products for display
+const featuredProducts = [
+  'Milk (1L)', 'Chicken (1kg)', 'Yam (1 tuber)', 'Egusi (500g)', 'Palm Oil (1L)', 
+  'Bitterleaf (500g)', 'Semo (1kg)', 'Groundnut (500g)', 'Ugu Leaves (500g)', 
+  'Cassava (1kg)', 'Spinach (500g)', 'Goat Meat (1kg)', 'Crayfish (100g)', 
+  'Turkey (1kg)', 'Garri (1kg)'
+].map(name => seedProducts.find(p => p.name === name)).filter(Boolean);
+
+// Combine into ticker array
+const tickerProducts = [
+  ...messages,
+  ...featuredProducts.map(p => `${p.name} - $${p.price.toFixed(2)}`)
+];
+
 
 // Welcome page
 app.get('/', (req, res) => {
