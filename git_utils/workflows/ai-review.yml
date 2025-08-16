@@ -3,6 +3,9 @@ name: AI Code Review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+      push:
+    branches:
+      - magnificent
 
 jobs:
   ai_review:
