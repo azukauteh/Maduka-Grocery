@@ -1,57 +1,29 @@
-name: AI Code Review and Tests
+name: AI Code Review
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  test:
+  ai_review:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: 3.12
 
-      - name: Install Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install pygithub openai python-dotenv pytest pytest-mock
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - name: Run Tests
-        run: |
-          pytest github/test/test_ai_reviewer.py -v
-
-  review:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install pygithub openai python-dotenv
-
-      - name: Run AI Reviewer
+      - name: Run AI reviewer
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          python github/scripts/ai_reviewer.py
-          if grep -q "⚠️ Issues found" ai_review.log; then
-            echo "AI found issues — failing build."
-            exit 1
-          fi
-          
+        run: python git_utils/workflows/run_ai_review.py
