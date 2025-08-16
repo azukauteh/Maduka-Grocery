@@ -1,11 +1,9 @@
-
 import os
 import json
 import requests
 import logging
 from github import Github
 from openai import OpenAI  # pyright: ignore[reportMissingImports]
-
 
 logging.basicConfig(
     filename="ai_review.log",
@@ -53,7 +51,7 @@ def get_pr_diff(pr, token: str) -> str:
 
 
 def review_diff(diff_text: str, client: OpenAI):
-    """Send the diff to OpenAI for review."""
+    """Send the diff to OpenAI for review and parse JSON response."""
     if not diff_text:
         logging.warning("No diff provided for review.")
         return []
@@ -64,9 +62,8 @@ def review_diff(diff_text: str, client: OpenAI):
             {
                 "role": "system",
                 "content": (
-                    "You are a senior software engineer reviewing a pull"
-                    "request diff. "
-                    "Return feedback in valid JSON format only."
+                    "You are a senior software engineer reviewing a pull "
+                    "request diff. Return feedback in valid JSON format only."
                 ),
             },
             {"role": "user", "content": diff_text},
@@ -83,3 +80,25 @@ def review_diff(diff_text: str, client: OpenAI):
     except (json.JSONDecodeError, ValueError) as e:
         logging.error(f"Invalid JSON from AI: {e}")
         raise Exception("Invalid AI response")
+
+
+def review_pr(pr, token: str, client: OpenAI):
+    """
+    Full PR review function:
+    1. Fetch PR diff
+    2. Split by file
+    3. Review each file via AI
+    4. Return aggregated comments
+    """
+    diff_text = get_pr_diff(pr, token)
+    files_diff = split_diff_by_file(diff_text)
+    all_comments = []
+
+    for filename, file_diff_lines in files_diff.items():
+        file_diff_text = "\n".join(file_diff_lines)
+        comments = review_diff(file_diff_text, client)
+        for comment in comments:
+            comment["file"] = filename
+        all_comments.extend(comments)
+
+    return all_comments
