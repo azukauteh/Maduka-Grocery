@@ -1,24 +1,44 @@
+
 import os
+import json
 from git_utils.ai_reviewer import get_pr_diff, review_diff
 from github import Github
 from openai import OpenAI  # pyright: ignore[reportMissingImports]
 
-""" GitHub setup"""
-gh_token = os.environ["GITHUB_TOKEN"]
-gh = Github(gh_token)
-repo = gh.get_repo(os.environ["GITHUB_REPOSITORY"])
-pr_number = int(os.environ["PR_NUMBER"])
-pr = repo.get_pull(pr_number)
 
-""" Get PR diff"""
-diff = get_pr_diff(pr, gh_token)
+def main():
+    """Run AI review on a pull request and post the results as a comment."""
 
-""" OpenAI client setup"""
-client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+    """ --- GitHub setup ---"""
+    gh_token = os.getenv("GITHUB_TOKEN")
+    repo_name = os.getenv("GITHUB_REPOSITORY")
+    pr_number = os.getenv("PR_NUMBER")
+    openai_key = os.getenv("OPENAI_API_KEY")
 
-""" Run AI review"""
-review = review_diff(diff, client)
+    if not all([gh_token, repo_name, pr_number, openai_key]):
+        raise ValueError("Missing one or more required"
+                         "environment variables.")
 
-""" Post review as PR comment"""
-pr.create_issue_comment(f"🤖 AI Review:\n{review}")
-print("AI review posted to PR.")
+    gh = Github(gh_token)
+    repo = gh.get_repo(repo_name)
+    pr = repo.get_pull(int(pr_number))
+
+    """ --- Get PR diff ---"""
+    diff = get_pr_diff(pr, gh_token)
+
+    """--- OpenAI client setup ---"""
+    client = OpenAI(api_key=openai_key)
+
+    """--- Run AI review ---"""
+    review = review_diff(diff, client)
+
+    """Ensure JSON feedback is printed nicely"""
+    review_output = json.dumps(review, indent=2)
+
+    """ --- Post review as PR comment ---"""
+    pr.create_issue_comment(f"🤖 AI Review:\n```json\n{review_output}\n```")
+    print(f"AI review posted to PR #{pr_number}.")
+
+
+if __name__ == "__main__":
+    main()
